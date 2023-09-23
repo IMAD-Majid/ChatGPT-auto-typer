@@ -2,7 +2,6 @@
 Automate sending multiple messages to chatGPT and saving the results.
 
 Steps:
-- open the folder "dist"
 - execute the file "main.exe"
 - enter the path to the messages file
 - enter the path to the responses directory
