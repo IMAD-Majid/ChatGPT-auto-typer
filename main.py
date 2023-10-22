@@ -3,31 +3,41 @@ import datetime
 import pyautogui as auto
 import pyperclip as cb
 
+def wait():
+    sleep(0.1)
+
 def autoType():
-    with open(messagesFilePath, "r") as f:
+    with open(messagesFilePath, "r", encoding="utf-8") as f:
         for line in f.readlines():
             if len(list(filter(lambda item: item in line, "qwertyuiopasdfghjklzxcvbnm"))) == 0:
                 continue
-            cb.copy(line)
-            auto.click(x=x, y=y)
-            sleep(0.1)
-            auto.hotkey("ctrl", 'v')
-            sleep(0.1)
-            auto.hotkey("tab")
-            sleep(0.1)
-            auto.hotkey("enter")
-            sleep(waitingDur)
-            auto.click(x=x, y=y)
-            sleep(0.1)
-            for i in range(4):
-                auto.hotkey("shift", "tab")
-                sleep(0.1)
-            auto.hotkey("enter")
-            sleep(0.1)
-            print(">", line)
+            if line == '\n':
+                continue
+            cb.copy(line.strip())
+            if (line[:10] != "**Chapter ") and (line[:8] != "Chapter "):
+                auto.click(x=x, y=y)
+                wait()
+                auto.hotkey("ctrl", 'v')
+                wait()
+                auto.hotkey("tab")
+                wait()
+                auto.hotkey("enter")
+
+                sleep(waitingDur)
+
+                auto.click(x=x, y=y)
+                wait()
+                for i in range(4):
+                    auto.hotkey("shift", "tab")
+                    wait()
+                auto.hotkey("enter")
+                wait()
             response = cb.paste()
-            with open(outputDestination + "chatGPT responses.md", 'a') as g:
+            with open(outputDestination + "chatGPT responses.md", 'a', encoding="utf-8") as g:
+                if (line[:2] == "- "):
+                    line = '#' + line[1:]
                 g.write(f"# {line}\n{response}\n")
+                print(">", line)
 
 
 """
@@ -46,14 +56,14 @@ def autoType():
 	1. how to read the clipboard?
 """
 
-messagesFilePath = input("Input file path: ")
-outputDestination = input("Output directory: ")
-waitingDur = int(input("Waiting duration (in seconds) for a response: "))
+messagesFilePath = "C:\\Users\\IMAD\\Documents\\my programming interests\\in.txt" #input("Input file path: ")
+outputDestination = "C:\\Users\\IMAD\\Documents\\my programming interests\\" #input("Output directory: ")
+waitingDur = 60 #int(input("Waiting duration (in seconds) for a response: "))
 
 print('')
-print("-"*10)
+print(" - "*10)
 input("Open a chatGPT chatting page!")
-print("-"*10)
+print(" - "*10)
 print('')
 
 for i in range(5):
@@ -74,7 +84,7 @@ except Exception as e:
 
 cb.copy(">>> D O N E :)")
 auto.click(x=x, y=y)
-sleep(0.1)
+wait()
 auto.hotkey("ctrl", 'v')
 
 input("\n>>> D O N E :)")
